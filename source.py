@@ -1,12 +1,12 @@
 import requests
 import sys
 import json
-
+from rich import print
 
 
 
 def location(response):
-	print("User's ipv4: ",response['ip'])
+	print("\nUser's ipv4: ",response['ip'])
 	print("\n User's country: ",response['country_name'])
 	print("\n User's state: ",response['region_name'])
 	print("\n User's city: ",response['city'])
@@ -18,10 +18,12 @@ def location(response):
 	lang = language[0]
 	print("\n\n\n Language: ",lang['name'])
 	print("\nCountry capital: ",location['capital'])
-def track(ip):
+async def track(ip):
+	
 	string = "http://api.ipstack.com/"+ str(ip) +"?access_key=8cfdee0b2ee03d45c7f2ccde94cc807d"
 	r = requests.get(string)
 	reson = r.json()
+	setattr(animate,'is_animated',False)
 	return(reson)
 
 def output(string,name):
@@ -41,11 +43,11 @@ def is_empty(lista):
 		return('full')
 	else:
 		return('empty')
-def campo():
+def campo(arquivo):
 	
 	#tracking = track(ip)
 	class area:
-		with open('ips','rb') as reader:
+		with open(str(arquivo),'rb') as reader:
 			count = 0
 			ips = reader.readlines()
 			for x in ips:
@@ -66,3 +68,35 @@ def espec():
 		ip = 'bla'
 	track = track(ip)
 	local = location(track)
+# importing the necessary packages
+#If it works remove animation class 
+def general_animation(text):
+	# This version is fixed and works
+	import sys, time
+	lowerstr = str(text)
+	upperstr = lowerstr.upper()
+	for x in range(len(lowerstr)):
+	     s = '\r' + lowerstr[0:x] + upperstr[x] + lowerstr[x+1:] + '\r'
+	     sys.stdout.write(s)
+	     sys.stdout.flush()
+	     time.sleep(0.1)
+
+async def animate(text,ip):
+		import time
+		import sys
+
+		
+		animation = "|/-\\"
+		
+		setattr(animate,'is_animated',True)
+		colored_string = '[green]   ' + str(text) + '[/green]'
+		print(str(colored_string), end = ' ') 
+		while(getattr(animate,'is_animated') == True):
+			#Gambiara
+			for i in range(4):
+				time.sleep(0.1)
+				sys.stdout.write("\r"+ animation[i % len(animation)])
+				sys.stdout.flush()
+				res  = await track(ip)
+
+		return(res)
